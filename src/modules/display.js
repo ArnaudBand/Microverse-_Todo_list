@@ -1,143 +1,128 @@
-const items = [];
+const lists = [];
 
-const textDecoration = (listInput) => {
-  listInput.forEach((item) => {
-    if (item.hasAttribute('checked')) {
-      item.nextSibling.style.textDecoration = 'line-through';
-    } else {
-      item.nextSibling.style.textDecoration = 'none';
-    }
-  });
-};
-
-const userInteraction = (listInput) => {
-  console.log('listUp', listInput)
-  listInput.forEach((item) => {
-    console.log('item', item)
-    item.addEventListener('change', () => {
-      const itemsLocal = JSON.parse(localStorage.getItem('itemsLocal'));
-      const parent = item.parentNode;
-      console.log('remove', parent)
-      const superParent = parent.parentNode;
-      const index = Array.prototype.indexOf.call(superParent.children, parent);
-      const currentItem = itemsLocal[index].completed;
-      if (currentItem) {
-        item.removeAttribute('checked');
-        parent.lastChild.style.display = 'none';
-        itemsLocal[index].completed = false;
-      } else {
-        item.setAttribute('checked', '');
-        parent.lastChild.style.display = 'block';
-        itemsLocal[index].completed = true;
-      }
-      textDecoration(listInput);
-      localStorage.setItem('itemsLocal', JSON.stringify(itemsLocal));
-      items.splice(0, items.length, ...itemsLocal);
+const checkInput = (inputList) => {
+    inputList.forEach((item) => {
+        item.addEventListener('click', () => {
+            const tasks = JSON.parse(localStorage.getItem('Tasks'));
+            const parentItem = item.parentNode
+            console.log('parentItem', parentItem);
+            const grandParent = parentItem.parentNode;
+            const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
+            const status = tasks[index].complete;
+            const line = parentItem.children.item(1);
+            const dot = parentItem.children.item(2);
+            const trash =  parentItem.children.item(3);
+            if(status) {
+                item.removeAttribute('checked');
+                dot.style.display = 'block';
+                trash.style.display = 'none';
+                line.classList.remove('lineThrough');
+                tasks[index].complete = false;
+            }else {
+                item.setAttribute('checked', '');
+                dot.style.display = 'none';
+                trash.style.display = 'block';
+                line.classList.add('lineThrough');
+                tasks[index].complete = true;
+            }
+            localStorage.setItem('Tasks', JSON.stringify(tasks));
+            lists.splice(0, lists.length, ...tasks);
+        });
     });
-  });
 };
 
-const removeItem = () => {
-  const button = document.querySelectorAll('.fa-trash-alt');
-  button.forEach((item) => {
-    const parent = item.parentNode;
-    const superParent = parent.parentNode;
-    const index = Array.prototype.indexOf.call(superParent.children, parent);
-    const listInput = parent.firstChild;
-    item.addEventListener('click', () => {
-      const itemsLocal = JSON.parse(localStorage.getItem('itemsLocal'));
-      items.splice(0, items.length, ...itemsLocal);
-      if (listInput.hasAttribute('checked')) {
-        parent.remove();
-        items.splice(index, 1);
-      }
-      for (let i = 0; i < items.length; i += 1) {
-        items[i].index = i + 1;
-      }
-      localStorage.setItem('itemsLocal', JSON.stringify(items));
+const deleteEl = () => {
+    const trashBtn = document.querySelectorAll('.fa-trash-o');
+    trashBtn.forEach((element) => {
+        const parentElement = element.parentNode;
+        console.log('parentElement', parentElement);
+        const grandParent = parentElement.parentNode;
+        const index = Array.prototype.indexOf.call(grandParent.children, parentElement);
+        const inputList = parentElement.children.item(0);
+        console.log('inputList', inputList);
+        element.addEventListener('click', () => {
+            const tasks = JSON.parse(localStorage.getItem('Tasks'));
+            lists.splice(0, lists.length, ...tasks);
+            if(inputList.hasAttribute('checked')) {
+                parentElement.remove();
+                lists.splice(index, 1)
+            }
+            for(let i = 0; i < lists.length; i += 1) {
+                lists[i].index = i + 1;
+            }
+            localStorage.setItem('Tasks', JSON.stringify(lists));
+        });
     });
-  });
 };
 
-const clearList = () => {
-  const itemsLocal = JSON.parse(localStorage.getItem('itemsLocal'));
-  items.splice(0, items.length, ...itemsLocal);
-  const list = document.querySelector('.ul-list');
-  const getClearElement = document.querySelector('.clear');
-  getClearElement.addEventListener('click', () => {
-    for (let i = 0; i < items.length; i += 1) {
-      if (items[i].completed) {
-        items.splice(i, 1);
-        list.childNodes[i].remove();
-      }
-    }
-    for (let i = 0; i < items.length; i += 1) {
-      items[i].index = i + 1;
-    }
-    localStorage.setItem('itemsLocal', JSON.stringify(items));
-  });
-};
-
-const updateValues = () => {
-  const itemDetails = document.querySelectorAll('.item-details');
-  itemDetails.forEach((item) => {
-    const parent = item.parentNode;
-    const superParent = parent.parentNode;
-    const index = Array.prototype.indexOf.call(superParent.children, parent);
-    item.addEventListener('change', () => {
-      items[index].description = item.value;
-      localStorage.setItem('itemsLocal', JSON.stringify(items));
-    });
-  });
-};
-
-const render = () => {
+const displayUI = () => {
   const listSection = document.querySelector('.list_section');
-  const itemsLocal = JSON.parse(localStorage.getItem('itemsLocal'));
-  items.splice(0, items.length, ...itemsLocal);
-  
-  const listInput = document.querySelectorAll('.list-input');
-  console.log('listDown', listInput)
-  userInteraction(listInput);
-  removeItem();
-  clearList();
-  updateValues();
+  const tasks = JSON.parse(localStorage.getItem('Tasks'));
+  lists.splice(0, lists.length, ...tasks);
+  let showList = '';
+  tasks.forEach((todo) => {
+      console.log('todo', todo.description);
+      showList += `
+              <div class="flex_check">
+                      <input type="checkbox" class="input_checkBox">
+                      <input type="text" class="label_check" value="${todo.description}">   
+                      <i class="fa fa-ellipsis-vertical"></i>                            
+                      <i class="fa fa-trash-o"></i>                            
+              </div>
+                  `;
+  });
+  listSection.innerHTML = showList;
+  const inputList = document.querySelectorAll('.input_checkBox');
+  checkInput(inputList);
+  deleteEl();
 };
 
-const displayTask = () => {
-  const form = document.querySelector('.type-list');
-  form.addEventListener('submit', (event) => {
+const addLocalStorage = () => {
+  const typeList = document.querySelector('.type-list');
+  const newTodo = document.querySelector('#new-todo');
+  typeList.addEventListener('keyup', (event) => {
     event.preventDefault();
-    const data = form.elements[0].value;
-    const object = {
-      description: data,
-      completed: false,
-      index: items.length + 1,
+    const data = newTodo.value;
+    if(event.key === 'Enter' && data) {
+        if(!lists) {
+            lists = [];
+        }
+        newTodo.value = '';
+        const object = {
+            description: data,
+            complete: false,
+            index: lists.length + 1,
+         }
+         lists.push(object);
+         localStorage.setItem('Tasks', JSON.stringify(lists));
+         displayUI();
     };
-    form.reset();
-    items.push(object);
-    localStorage.setItem('itemsLocal', JSON.stringify(items));
-    render();
   });
 };
 
-export default function populateStorage() {
-  window.addEventListener('load', () => {
-    render();
-    const listInput = document.querySelectorAll('.list-input');
-    const itemsLocal = JSON.parse(localStorage.getItem('itemsLocal'));
-    listInput.forEach((item) => {
-      const parent = item.parentNode;
-      const superParent = parent.parentNode;
-      const index = Array.prototype.indexOf.call(superParent.children, parent);
-      const currentItem = itemsLocal[index].completed;
-      if (currentItem) {
+const updateLocalStorage = () => {
+   window.addEventListener('load', () => {
+    displayUI();
+    const inputList = document.querySelectorAll('.input_checkBox');
+    const tasks = JSON.parse(localStorage.getItem('Tasks'));
+    inputList.forEach((item) => {
+        const parentItem = item.parentNode
+        const grandParent = parentItem.parentNode;
+        const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
+        const status = tasks[index].complete;
+        const line = parentItem.children.item(1);
+        const dot = parentItem.children.item(2);
+        const trash =  parentItem.children.item(3);
+      if (status) {
         item.setAttribute('checked', '');
-        parent.lastChild.style.display = 'block';
+        dot.style.display = 'none';
+        trash.style.display = 'block';
+        line.classList.add('lineThrough');
+        tasks[index].complete = true;
       }
     });
-    textDecoration(listInput);
   });
 }
-
-displayTask();
+updateLocalStorage();
+addLocalStorage();
+displayUI();
