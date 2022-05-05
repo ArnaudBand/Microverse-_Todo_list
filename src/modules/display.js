@@ -52,6 +52,40 @@ const deleteEl = () => {
   });
 };
 
+const clearAllComplete = () => {
+  const tasks = JSON.parse(localStorage.getItem('Tasks'));
+  lists.splice(0, lists.length, ...tasks);
+  const listSection = document.querySelector('.list_section');
+  const clearAllDone = document.querySelector('#clear');
+  clearAllDone.addEventListener('click', () => {
+    for (let i = 0; i < lists.length; i += 1) {
+      if (lists[i].complete) {
+        lists.splice(i, 1);
+        listSection.childNodes[i].remove();
+      }
+    }
+
+    for (let i = 0; i < lists.length; i += 1) {
+      lists[i].index = i + 1;
+    }
+    localStorage.setItem('Tasks', JSON.stringify(lists));
+    document.location.reload();
+  });
+};
+
+const updateDescription = () => {
+  const labelCheck = document.querySelectorAll('.label_check');
+  labelCheck.forEach((item) => {
+    const parentItem = item.parentNode;
+    const grandParent = parentItem.parentNode;
+    const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
+    item.addEventListener('change', () => {
+      lists[index].description = item.value;
+      localStorage.setItem('Tasks', JSON.stringify(lists));
+    });
+  });
+};
+
 const displayUI = () => {
   const listSection = document.querySelector('.list_section');
   const tasks = JSON.parse(localStorage.getItem('Tasks'));
@@ -71,6 +105,8 @@ const displayUI = () => {
   const inputList = document.querySelectorAll('.input_checkBox');
   checkInput(inputList);
   deleteEl();
+  clearAllComplete();
+  updateDescription();
 };
 
 const addLocalStorage = () => {
