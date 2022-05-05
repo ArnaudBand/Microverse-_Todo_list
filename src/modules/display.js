@@ -1,58 +1,55 @@
 const lists = [];
 
 const checkInput = (inputList) => {
-    inputList.forEach((item) => {
-        item.addEventListener('click', () => {
-            const tasks = JSON.parse(localStorage.getItem('Tasks'));
-            const parentItem = item.parentNode
-            console.log('parentItem', parentItem);
-            const grandParent = parentItem.parentNode;
-            const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
-            const status = tasks[index].complete;
-            const line = parentItem.children.item(1);
-            const dot = parentItem.children.item(2);
-            const trash =  parentItem.children.item(3);
-            if(status) {
-                item.removeAttribute('checked');
-                dot.style.display = 'block';
-                trash.style.display = 'none';
-                line.classList.remove('lineThrough');
-                tasks[index].complete = false;
-            }else {
-                item.setAttribute('checked', '');
-                dot.style.display = 'none';
-                trash.style.display = 'block';
-                line.classList.add('lineThrough');
-                tasks[index].complete = true;
-            }
-            localStorage.setItem('Tasks', JSON.stringify(tasks));
-            lists.splice(0, lists.length, ...tasks);
-        });
+  inputList.forEach((item) => {
+    item.addEventListener('click', () => {
+      const tasks = JSON.parse(localStorage.getItem('Tasks'));
+      const parentItem = item.parentNode;
+      const grandParent = parentItem.parentNode;
+      const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
+      const status = tasks[index].complete;
+      const line = parentItem.children.item(1);
+      const dot = parentItem.children.item(2);
+      const trash = parentItem.children.item(3);
+      if (status) {
+        item.removeAttribute('checked');
+        dot.style.display = 'block';
+        trash.style.display = 'none';
+        line.classList.remove('lineThrough');
+        tasks[index].complete = false;
+      } else {
+        item.setAttribute('checked', '');
+        dot.style.display = 'none';
+        trash.style.display = 'block';
+        line.classList.add('lineThrough');
+        tasks[index].complete = true;
+      }
+      localStorage.setItem('Tasks', JSON.stringify(tasks));
+      lists.splice(0, lists.length, ...tasks);
     });
+  });
 };
 
 const deleteEl = () => {
-    const trashBtn = document.querySelectorAll('.fa-trash-o');
-    trashBtn.forEach((element) => {
-        const parentElement = element.parentNode;
-        console.log('parentElement', parentElement);
-        const grandParent = parentElement.parentNode;
-        const index = Array.prototype.indexOf.call(grandParent.children, parentElement);
-        const inputList = parentElement.children.item(0);
-        console.log('inputList', inputList);
-        element.addEventListener('click', () => {
-            const tasks = JSON.parse(localStorage.getItem('Tasks'));
-            lists.splice(0, lists.length, ...tasks);
-            if(inputList.hasAttribute('checked')) {
-                parentElement.remove();
-                lists.splice(index, 1)
-            }
-            for(let i = 0; i < lists.length; i += 1) {
-                lists[i].index = i + 1;
-            }
-            localStorage.setItem('Tasks', JSON.stringify(lists));
-        });
+  const trashBtn = document.querySelectorAll('.fa-trash-o');
+  trashBtn.forEach((element) => {
+    const parentElement = element.parentNode;
+    const grandParent = parentElement.parentNode;
+    const index = Array.prototype.indexOf.call(grandParent.children, parentElement);
+    const inputList = parentElement.children.item(0);
+    element.addEventListener('click', () => {
+      const tasks = JSON.parse(localStorage.getItem('Tasks'));
+      lists.splice(0, lists.length, ...tasks);
+      if (inputList.hasAttribute('checked')) {
+        parentElement.remove();
+        lists.splice(index, 1);
+      }
+      for (let i = 0; i < lists.length; i += 1) {
+        lists[i].index = i + 1;
+      }
+      localStorage.setItem('Tasks', JSON.stringify(lists));
     });
+  });
 };
 
 const displayUI = () => {
@@ -61,8 +58,7 @@ const displayUI = () => {
   lists.splice(0, lists.length, ...tasks);
   let showList = '';
   tasks.forEach((todo) => {
-      console.log('todo', todo.description);
-      showList += `
+    showList += `
               <div class="flex_check">
                       <input type="checkbox" class="input_checkBox">
                       <input type="text" class="label_check" value="${todo.description}">   
@@ -83,36 +79,37 @@ const addLocalStorage = () => {
   typeList.addEventListener('keyup', (event) => {
     event.preventDefault();
     const data = newTodo.value;
-    if(event.key === 'Enter' && data) {
-        if(!lists) {
-            lists = [];
-        }
-        newTodo.value = '';
-        const object = {
-            description: data,
-            complete: false,
-            index: lists.length + 1,
-         }
-         lists.push(object);
-         localStorage.setItem('Tasks', JSON.stringify(lists));
-         displayUI();
-    };
+    if (event.key === 'Enter' && data) {
+      if (!lists) {
+        // eslint-disable-next-line no-const-assign
+        lists = [];
+      }
+      newTodo.value = '';
+      const object = {
+        description: data,
+        complete: false,
+        index: lists.length + 1,
+      };
+      lists.push(object);
+      localStorage.setItem('Tasks', JSON.stringify(lists));
+      displayUI();
+    }
   });
 };
 
 const updateLocalStorage = () => {
-   window.addEventListener('load', () => {
+  window.addEventListener('load', () => {
     displayUI();
     const inputList = document.querySelectorAll('.input_checkBox');
     const tasks = JSON.parse(localStorage.getItem('Tasks'));
     inputList.forEach((item) => {
-        const parentItem = item.parentNode
-        const grandParent = parentItem.parentNode;
-        const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
-        const status = tasks[index].complete;
-        const line = parentItem.children.item(1);
-        const dot = parentItem.children.item(2);
-        const trash =  parentItem.children.item(3);
+      const parentItem = item.parentNode;
+      const grandParent = parentItem.parentNode;
+      const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
+      const status = tasks[index].complete;
+      const line = parentItem.children.item(1);
+      const dot = parentItem.children.item(2);
+      const trash = parentItem.children.item(3);
       if (status) {
         item.setAttribute('checked', '');
         dot.style.display = 'none';
@@ -122,7 +119,7 @@ const updateLocalStorage = () => {
       }
     });
   });
-}
+};
 updateLocalStorage();
 addLocalStorage();
 displayUI();
