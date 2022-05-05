@@ -58,10 +58,10 @@ const clearAllComplete = () => {
   const listSection = document.querySelector('.list_section');
   const clearAllDone = document.querySelector('#clear');
   clearAllDone.addEventListener('click', () => {
-    for (let i = 0; i < lists.length; i += 1) {
-      if (lists[i].complete) {
-        lists.splice(i, 1);
-        listSection.childNodes[i].remove();
+    for (let x = 0; x < lists.length; x += 1) {
+      if (lists[x].complete) {
+        lists.splice(x, 1);
+        listSection.childNodes[x].remove();
       }
     }
 
