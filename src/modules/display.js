@@ -55,20 +55,13 @@ const deleteEl = () => {
 const clearAllComplete = () => {
   const tasks = JSON.parse(localStorage.getItem('Tasks'));
   lists.splice(0, lists.length, ...tasks);
-  const listSection = document.querySelector('.list_section');
   const clearAllDone = document.querySelector('#clear');
   clearAllDone.addEventListener('click', () => {
-    for (let x = 0; x < lists.length; x += 1) {
-      if (lists[x].complete) {
-        lists.splice(x, 1);
-        listSection.childNodes[x].remove();
-      }
+    const filterList = lists.filter((item) => !item.complete, ...lists);
+    for (let i = 0; i < filterList.length; i += 1) {
+      filterList[i].index = i + 1;
     }
-
-    for (let i = 0; i < lists.length; i += 1) {
-      lists[i].index = i + 1;
-    }
-    localStorage.setItem('Tasks', JSON.stringify(lists));
+    localStorage.setItem('Tasks', JSON.stringify(filterList));
     document.location.reload();
   });
 };
