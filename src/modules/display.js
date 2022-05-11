@@ -152,3 +152,5 @@ const updateLocalStorage = () => {
 updateLocalStorage();
 addLocalStorage();
 displayUI();
+
+module.exports = addLocalStorage;
