@@ -1,2 +1,4 @@
 import './style.css';
-import './modules/display.js';
+import { setup } from './modules/display.js';
+
+window.addEventListener('load', setup);

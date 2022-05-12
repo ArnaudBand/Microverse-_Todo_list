@@ -1,4 +1,4 @@
-const lists = [];
+let lists = [];
 
 const checkInput = (inputList) => {
   inputList.forEach((item) => {
@@ -30,24 +30,30 @@ const checkInput = (inputList) => {
   });
 };
 
+export const setList = (list) => {
+  lists = list;
+  localStorage.setItem('Tasks', JSON.stringify(lists));
+};
+
+export const deleteTask = (element) => {
+  console.log('element', element);
+  const grandParent = element.parentElement;
+  console.log('grandParent', grandParent);
+  const index = Array.prototype.indexOf.call(grandParent.children, element);
+  const inputList = element.children.item(0);
+  if (inputList.hasAttribute('checked')) {
+    element.remove();
+    lists.splice(index, 1);
+  }
+  setList(lists);
+};
+
 const deleteEl = () => {
   const trashBtn = document.querySelectorAll('.fa-trash-o');
   trashBtn.forEach((element) => {
-    const parentElement = element.parentNode;
-    const grandParent = parentElement.parentNode;
-    const index = Array.prototype.indexOf.call(grandParent.children, parentElement);
-    const inputList = parentElement.children.item(0);
-    element.addEventListener('click', () => {
-      const tasks = JSON.parse(localStorage.getItem('Tasks'));
-      lists.splice(0, lists.length, ...tasks);
-      if (inputList.hasAttribute('checked')) {
-        parentElement.remove();
-        lists.splice(index, 1);
-      }
-      for (let i = 0; i < lists.length; i += 1) {
-        lists[i].index = i + 1;
-      }
-      localStorage.setItem('Tasks', JSON.stringify(lists));
+    element.addEventListener('click', (event) => {
+      const parent = event.target.parentNode;
+      deleteTask(parent);
     });
   });
 };
@@ -80,17 +86,22 @@ const updateDescription = () => {
 };
 
 const displayUI = () => {
-  const listSection = document.querySelector('.list_section');
   const tasks = JSON.parse(localStorage.getItem('Tasks'));
   lists.splice(0, lists.length, ...tasks);
+  const listSection = document.querySelector('.list_section');
   let showList = '';
   tasks.forEach((todo) => {
+    const checked = todo.complete ? 'checked' : '';
+    const dot = todo.complete ? 'style="display:none;"' : '';
+    const trash = todo.complete ? 'style="display:block;"' : '';
+    const line = todo.complete ? ' lineThrough' : '';
+
     showList += `
               <div class="flex_check">
-                      <input type="checkbox" class="input_checkBox">
-                      <input type="text" class="label_check" value="${todo.description}">   
-                      <i class="fa fa-ellipsis-vertical"></i>                            
-                      <i class="fa fa-trash-o"></i>                            
+                      <input type="checkbox" class="input_checkBox" ${checked}>
+                      <input type="text" class="label_check${line}" value="${todo.description}">   
+                      <i class="fa fa-ellipsis-vertical" ${dot}></i>                            
+                      <i class="fa fa-trash-o" ${trash}></i>                            
               </div>
                   `;
   });
@@ -102,55 +113,34 @@ const displayUI = () => {
   updateDescription();
 };
 
-const addLocalStorage = () => {
-  const typeList = document.querySelector('.type-list');
+export const getList = () => lists;
+
+export const emptyList = () => { lists = []; };
+
+export const addNewTask = (event) => {
+  event.preventDefault();
+
   const newTodo = document.querySelector('#new-todo');
-  typeList.addEventListener('keyup', (event) => {
-    event.preventDefault();
-    const data = newTodo.value;
-    if (event.key === 'Enter' && data) {
-      if (!lists) {
-        // eslint-disable-next-line no-const-assign
-        lists = [];
-      }
-      newTodo.value = '';
-      const object = {
-        description: data,
-        complete: false,
-        index: lists.length + 1,
-      };
-      lists.push(object);
-      localStorage.setItem('Tasks', JSON.stringify(lists));
-      displayUI();
-    }
-  });
-};
-
-const updateLocalStorage = () => {
-  window.addEventListener('load', () => {
+  const data = newTodo.value.trim();
+  if (event.key === 'Enter' && data) {
+    newTodo.value = '';
+    const object = {
+      description: data,
+      complete: false,
+      index: lists.length + 1,
+    };
+    lists.push(object);
+    localStorage.setItem('Tasks', JSON.stringify(lists));
     displayUI();
-    const inputList = document.querySelectorAll('.input_checkBox');
-    const tasks = JSON.parse(localStorage.getItem('Tasks'));
-    inputList.forEach((item) => {
-      const parentItem = item.parentNode;
-      const grandParent = parentItem.parentNode;
-      const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
-      const status = tasks[index].complete;
-      const line = parentItem.children.item(1);
-      const dot = parentItem.children.item(2);
-      const trash = parentItem.children.item(3);
-      if (status) {
-        item.setAttribute('checked', '');
-        dot.style.display = 'none';
-        trash.style.display = 'block';
-        line.classList.add('lineThrough');
-        tasks[index].complete = true;
-      }
-    });
-  });
+  }
 };
-updateLocalStorage();
-addLocalStorage();
-displayUI();
 
-module.exports = addLocalStorage;
+const setupNewTaskInput = () => {
+  const typeList = document.querySelector('.type-list');
+  typeList.addEventListener('keyup', addNewTask);
+};
+
+export const setup = () => {
+  displayUI();
+  setupNewTaskInput();
+};
