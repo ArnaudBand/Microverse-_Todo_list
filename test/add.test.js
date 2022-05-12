@@ -1,4 +1,6 @@
-import { getList, emptyList, addNewTask, setList, deleteTask } from '../src/modules/display.js';
+import {
+  getList, emptyList, addNewTask, setList, deleteTask,
+} from '../src/modules/display.js';
 /*eslint-disable*/
 
 const html = `
@@ -12,7 +14,14 @@ const html = `
                       <input type="text" class="text" value="New description" id="new-todo" required>
                       <button class="add-button" type="submit"><i class="add-icon fa fa-share" id="add"></i></button>
                 </div>
-                <div class="list_section"></div>
+                <div class="list_section">
+                  <div class="flex_check">
+                      <input type="checkbox" class="input_checkBox" checked>
+                      <input type="text" class="label_check" value="New description">   
+                      <i class="fa fa-ellipsis-vertical" id="dotsBtn"></i>                            
+                      <i class="fa fa-trash-o" id="trashBtn"></i>                            
+                  </div>
+                </div>
                 <div id="clear-completed">
                     <button type="button" id="clear">Clear all completed</button>
                 </div>
@@ -41,14 +50,12 @@ describe('Testing data handling', () => {
   it('shoud remove a task from the list', () => {
     setList([ {description: 'New description', complete: false, index: 1} ])
     document.body.innerHTML = html;
-    const grandParent = document.querySelectorAll('.flex_check');
-    const ele = grandParent.children;
+    const trashBtn = document.querySelector('#trashBtn');
     const event = {
-      // type: 'click',
-      grandParent,
+      type: 'click',
+      target: trashBtn,
     }
-    // const index = Array.prototype.indexOf.call(ele, event);
-    // const inputList = event.children.item(0);
+
     deleteTask(event);
 
     const list = getList();

@@ -35,14 +35,14 @@ export const setList = (list) => {
   localStorage.setItem('Tasks', JSON.stringify(lists));
 };
 
-export const deleteTask = (element) => {
-  console.log('element', element);
-  const grandParent = element.parentElement;
-  console.log('grandParent', grandParent);
-  const index = Array.prototype.indexOf.call(grandParent.children, element);
-  const inputList = element.children.item(0);
-  if (inputList.hasAttribute('checked')) {
-    element.remove();
+export const deleteTask = (event) => {
+  const btn = event.target;
+  const parent = btn.parentNode;
+  const grandParent = parent.parentNode;
+  const index = Array.prototype.indexOf.call(grandParent.children, parent);
+  const inputElement = parent.children.item(0);
+  if (inputElement.hasAttribute('checked')) {
+    parent.remove();
     lists.splice(index, 1);
   }
   setList(lists);
@@ -51,10 +51,7 @@ export const deleteTask = (element) => {
 const deleteEl = () => {
   const trashBtn = document.querySelectorAll('.fa-trash-o');
   trashBtn.forEach((element) => {
-    element.addEventListener('click', (event) => {
-      const parent = event.target.parentNode;
-      deleteTask(parent);
-    });
+    element.addEventListener('click', deleteTask);
   });
 };
 
