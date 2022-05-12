@@ -1,5 +1,6 @@
 import {
-  getList, emptyList, addNewTask,
+  getList, emptyList, addNewTask,setList, deleteTask,
+
 } from '../src/modules/display.js';
 
 const html = `
@@ -44,4 +45,21 @@ describe('Testing data handling', () => {
     expect(list).toHaveLength(1);
     expect(list[0]).toEqual({ description: 'New description', complete: false, index: 1 });
   });
+  it('shoud remove a task from the list', () => {
+    setList([{ description: 'New description', complete: false, index: 1 }]);
+    document.body.innerHTML = html;
+    const trashBtn = document.querySelector('#trashBtn');
+    const event = {
+      type: 'click',
+      target: trashBtn,
+    };
+
+    deleteTask(event);
+
+    const list = getList();
+    expect(list).toBeDefined();
+    expect(list).toHaveLength(0);
+    expect(list).toEqual([]);
+  });
+
 });
