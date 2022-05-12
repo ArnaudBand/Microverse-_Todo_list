@@ -1,7 +1,6 @@
 import {
-  getList, emptyList, addNewTask, setList, deleteTask,
+  getList, emptyList, addNewTask,
 } from '../src/modules/display.js';
-/*eslint-disable*/
 
 const html = `
     <div class="container_todo">
@@ -30,39 +29,19 @@ const html = `
 `;
 
 describe('Testing data handling', () => {
-
   it('shoud add a task to the list', () => {
     emptyList();
     document.body.innerHTML = html;
     const event = {
       key: 'Enter',
-      preventDefault: () => {}
-    }
+      preventDefault: () => {},
+    };
 
     addNewTask(event);
 
     const list = getList();
     expect(list).toBeDefined();
     expect(list).toHaveLength(1);
-    expect(list[0]).toEqual({description: 'New description', complete: false, index: 1})
-  })
-
-  it('shoud remove a task from the list', () => {
-    setList([ {description: 'New description', complete: false, index: 1} ])
-    document.body.innerHTML = html;
-    const trashBtn = document.querySelector('#trashBtn');
-    const event = {
-      type: 'click',
-      target: trashBtn,
-    }
-
-    deleteTask(event);
-
-    const list = getList();
-    expect(list).toBeDefined();
-    expect(list).toHaveLength(0);
-    expect(list).toEqual([])
-  })
+    expect(list[0]).toEqual({ description: 'New description', complete: false, index: 1 });
+  });
 });
-
-
