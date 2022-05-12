@@ -1,5 +1,5 @@
 import {
-  getList, emptyList, addNewTask,setList, deleteTask,
+  getList, emptyList, addNewTask, setList, deleteTask,
 
 } from '../src/modules/display.js';
 
@@ -61,5 +61,4 @@ describe('Testing data handling', () => {
     expect(list).toHaveLength(0);
     expect(list).toEqual([]);
   });
-
 });
