@@ -27,7 +27,7 @@ A Web Browser (preferably Google Chrome)
 
 ### Live
 
-Live demo:
+Live demo: [Todo_list](https://arnaudband.github.io/Microverse-_Todo_list/dist/)
 
 ### Setup
 
