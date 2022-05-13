@@ -33,7 +33,7 @@ const html = `
         </div>
 `;
 
-describe('Testing data handling', () => {
+describe('Testing check update and clear all complete', () => {
     it('should check the item', () => {
         setList([{ description: 'New description', complete: false, index: 1 }]);
         document.body.innerHTML = html;
