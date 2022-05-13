@@ -61,23 +61,6 @@ const deleteEl = () => {
   });
 };
 
-export const deleteCompleteTasks = () => {
-  const filterList = lists.filter((item) => !item.complete, ...lists);
-  for (let i = 0; i < filterList.length; i += 1) {
-    filterList[i].index = i + 1;
-  }
-  // localStorage.setItem('Tasks', JSON.stringify(filterList));
-  setList(filterList);
-  document.location.reload();
-};
-
-const clearAllComplete = () => {
-  // const tasks = JSON.parse(localStorage.getItem('Tasks'));
-  // lists.splice(0, lists.length, ...tasks);
-  const clearAllDone = document.querySelector('#clear');
-  clearAllDone.addEventListener('click', deleteCompleteTasks);
-};
-
 const updateDescription = () => {
   const labelCheck = document.querySelectorAll('.label_check');
   labelCheck.forEach((item) => {
@@ -115,8 +98,18 @@ const displayUI = () => {
   const inputList = document.querySelectorAll('.input_checkBox');
   checkInput(inputList);
   deleteEl();
-  clearAllComplete();
   updateDescription();
+};
+
+export const deleteCompleteTasks = () => {
+  const filterList = lists.filter((item) => !item.complete, ...lists);
+  for (let i = 0; i < filterList.length; i += 1) {
+    filterList[i].index = i + 1;
+  }
+  // localStorage.setItem('Tasks', JSON.stringify(filterList));
+  setList(filterList);
+
+  displayUI();
 };
 
 export const getList = () => lists;
@@ -146,7 +139,13 @@ const setupNewTaskInput = () => {
   typeList.addEventListener('keyup', addNewTask);
 };
 
+const setupClearAllComplete = () => {
+  const clearAllDone = document.querySelector('#clear');
+  clearAllDone.addEventListener('click', deleteCompleteTasks);
+};
+
 export const setup = () => {
   displayUI();
   setupNewTaskInput();
+  setupClearAllComplete();
 };
