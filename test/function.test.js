@@ -4,7 +4,7 @@
 * @jest-environment jsdom
 */
 
-import { getList, setList, checkEl, deleteCompleteTasks, updateEdit } from "../src/modules/display.js";
+import { getList, setList, checkEl, deleteCompleteTasks, changeDescription } from "../src/modules/display.js";
 
 
 const html = `
@@ -67,24 +67,22 @@ describe('Testing data handling', () => {
     expect(list[0]).toEqual({ description: 'Tasks 2', complete: false, index: 1 });
     })
 
-    // it("should update the edit change's", () => {
-    //     setList([{ description: 'New description', complete: false, index: 1 }]);
-    //     document.body.innerHTML = html;
-    //     const labelCheck = document.querySelector('.label_check');
+    it("should update the edit change's", () => {
+        setList([{ description: 'Old description', complete: false, index: 1 }]);
+        document.body.innerHTML = html;
+        const labelCheck = document.querySelector('.label_check');
+        const event = {
+            type: 'change',
+            target: labelCheck,
+        }
 
-    //     const event = {
-    //         type: 'change',
-    //         target: labelCheck,
-    //     }
-    //     console.log(updateEdit(event));
-    //     updateEdit(event);
+        changeDescription(event);
 
-    //     let newValue = 'Old description';
+        let newValue = 'New description';
 
-    //     const list = getList();
-    //     expect(list).toBeDefined();
-    //     expect(list).toHaveLength(1);
-    //     console.log(list[0]);
-    //     expect(list[0]).toEqual({ description: newValue, complete: false, index: 1 });
-    // })
+        const list = getList();
+        expect(list).toBeDefined();
+        expect(list).toHaveLength(1);
+        expect(list[0]).toEqual({ description: newValue, complete: false, index: 1 });
+    })
 })
