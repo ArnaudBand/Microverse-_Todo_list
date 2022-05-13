@@ -27,8 +27,6 @@ export const checkEl = (event) => {
     line.classList.add('lineThrough');
     lists[index].complete = true;
   }
-  // localStorage.setItem('Tasks', JSON.stringify(tasks));
-  // lists.splice(0, lists.length, ...tasks);
   setList(lists);
 };
 
@@ -109,7 +107,6 @@ export const deleteCompleteTasks = () => {
   for (let i = 0; i < filterList.length; i += 1) {
     filterList[i].index = i + 1;
   }
-  // localStorage.setItem('Tasks', JSON.stringify(filterList));
   setList(filterList);
 
   displayUI();
