@@ -29,7 +29,7 @@ const html = `
         </div>
 `;
 
-describe('Testing data handling', () => {
+describe('Testing add and remove', () => {
   it('shoud add a task to the list', () => {
     emptyList();
     document.body.innerHTML = html;

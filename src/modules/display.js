@@ -1,38 +1,39 @@
 let lists = [];
 
-const checkInput = (inputList) => {
-  inputList.forEach((item) => {
-    item.addEventListener('click', () => {
-      const tasks = JSON.parse(localStorage.getItem('Tasks'));
-      const parentItem = item.parentNode;
-      const grandParent = parentItem.parentNode;
-      const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
-      const status = tasks[index].complete;
-      const line = parentItem.children.item(1);
-      const dot = parentItem.children.item(2);
-      const trash = parentItem.children.item(3);
-      if (status) {
-        item.removeAttribute('checked');
-        dot.style.display = 'block';
-        trash.style.display = 'none';
-        line.classList.remove('lineThrough');
-        tasks[index].complete = false;
-      } else {
-        item.setAttribute('checked', '');
-        dot.style.display = 'none';
-        trash.style.display = 'block';
-        line.classList.add('lineThrough');
-        tasks[index].complete = true;
-      }
-      localStorage.setItem('Tasks', JSON.stringify(tasks));
-      lists.splice(0, lists.length, ...tasks);
-    });
-  });
-};
-
 export const setList = (list) => {
   lists = list;
   localStorage.setItem('Tasks', JSON.stringify(lists));
+};
+
+export const checkEl = (event) => {
+  const check = event.target;
+  const parentItem = check.parentNode;
+  const grandParent = parentItem.parentNode;
+  const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
+  const status = lists[index].complete;
+  const line = parentItem.children.item(1);
+  const dot = parentItem.children.item(2);
+  const trash = parentItem.children.item(3);
+  if (status) {
+    check.removeAttribute('checked');
+    dot.style.display = 'block';
+    trash.style.display = 'none';
+    line.classList.remove('lineThrough');
+    lists[index].complete = false;
+  } else {
+    check.setAttribute('checked', '');
+    dot.style.display = 'none';
+    trash.style.display = 'block';
+    line.classList.add('lineThrough');
+    lists[index].complete = true;
+  }
+  setList(lists);
+};
+
+const checkInput = (inputList) => {
+  inputList.forEach((item) => {
+    item.addEventListener('click', checkEl);
+  });
 };
 
 export const deleteTask = (event) => {
@@ -45,6 +46,9 @@ export const deleteTask = (event) => {
     parent.remove();
     lists.splice(index, 1);
   }
+  lists.forEach((e, i) => {
+    lists[i].index = i + 1;
+  });
   setList(lists);
 };
 
@@ -55,30 +59,19 @@ const deleteEl = () => {
   });
 };
 
-const clearAllComplete = () => {
-  const tasks = JSON.parse(localStorage.getItem('Tasks'));
-  lists.splice(0, lists.length, ...tasks);
-  const clearAllDone = document.querySelector('#clear');
-  clearAllDone.addEventListener('click', () => {
-    const filterList = lists.filter((item) => !item.complete, ...lists);
-    for (let i = 0; i < filterList.length; i += 1) {
-      filterList[i].index = i + 1;
-    }
-    localStorage.setItem('Tasks', JSON.stringify(filterList));
-    document.location.reload();
-  });
+export const changeDescription = (event) => {
+  const descriptionElement = event.target;
+  const parentItem = descriptionElement.parentNode;
+  const grandParent = parentItem.parentNode;
+  const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
+  lists[index].description = descriptionElement.value;
+  setList(lists);
 };
 
 const updateDescription = () => {
   const labelCheck = document.querySelectorAll('.label_check');
   labelCheck.forEach((item) => {
-    const parentItem = item.parentNode;
-    const grandParent = parentItem.parentNode;
-    const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
-    item.addEventListener('change', () => {
-      lists[index].description = item.value;
-      localStorage.setItem('Tasks', JSON.stringify(lists));
-    });
+    item.addEventListener('change', changeDescription);
   });
 };
 
@@ -106,8 +99,17 @@ const displayUI = () => {
   const inputList = document.querySelectorAll('.input_checkBox');
   checkInput(inputList);
   deleteEl();
-  clearAllComplete();
   updateDescription();
+};
+
+export const deleteCompleteTasks = () => {
+  const filterList = lists.filter((item) => !item.complete, ...lists);
+  for (let i = 0; i < filterList.length; i += 1) {
+    filterList[i].index = i + 1;
+  }
+  setList(filterList);
+
+  displayUI();
 };
 
 export const getList = () => lists;
@@ -137,7 +139,13 @@ const setupNewTaskInput = () => {
   typeList.addEventListener('keyup', addNewTask);
 };
 
+const setupClearAllComplete = () => {
+  const clearAllDone = document.querySelector('#clear');
+  clearAllDone.addEventListener('click', deleteCompleteTasks);
+};
+
 export const setup = () => {
   displayUI();
   setupNewTaskInput();
+  setupClearAllComplete();
 };
