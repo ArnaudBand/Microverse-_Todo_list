@@ -61,16 +61,19 @@ const deleteEl = () => {
   });
 };
 
+export const changeDescription = (event) => {
+  const descriptionElement = event.target;
+  const parentItem = descriptionElement.parentNode;
+  const grandParent = parentItem.parentNode;
+  const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
+  lists[index].description = descriptionElement.value;
+  setList(lists);
+};
+
 const updateDescription = () => {
   const labelCheck = document.querySelectorAll('.label_check');
   labelCheck.forEach((item) => {
-    const parentItem = item.parentNode;
-    const grandParent = parentItem.parentNode;
-    const index = Array.prototype.indexOf.call(grandParent.children, parentItem);
-    item.addEventListener('change', () => {
-      lists[index].description = item.value;
-      localStorage.setItem('Tasks', JSON.stringify(lists));
-    });
+    item.addEventListener('change', changeDescription);
   });
 };
 
