@@ -200,6 +200,17 @@ You can deploy this project using:
 - Twitter: [@twitterhandle](https://twitter.com/ba104781)
 - LinkedIn: [LinkedIn](https://linkedin.com/in/ArnaudBandonkeye/)
 
+👤 **Roberto A. Baños Alvarez**
+
+- GitHub: [@Roberto](https://github.com/rbanos-mv)
+- Twitter: [@twitterhandle](https://twitter.com/RobertoBanosMV)
+- LinkedIn: [LinkedIn](https://www.linkedin.com/in/roberto-a-banos-alvarez/)
+
+👤 **Yilikal Teshome**
+
+- GitHub: [@githubhandle](https://github.com/Yilikal250)
+- Twitter: [@twitterhandle](https://twitter.com/TeshomeYilikal)
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
