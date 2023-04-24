@@ -251,7 +251,7 @@ If you like this project, show your support by giving a ⭐️ to this project.
 
 > Give credit to everyone who inspired your codebase.
 
-I would like to thank code reviewers.
+I would like to thank all contributors and code reviewers.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
