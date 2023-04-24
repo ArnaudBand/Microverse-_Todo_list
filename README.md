@@ -104,9 +104,9 @@ After you're finished please remove all the comments and instructions!
 
 > Describe between 1-3 key features of the application.
 
-- **[State_management]**
-- **[User_interface_(UI)]**
-- **[Local_storage]**
+- User interface (UI)
+- Local storage
+- Test
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -209,8 +209,8 @@ You can deploy this project using:
 
 > Describe 1 - 3 features you will add to the project.
 
-- [ ] **[Database]**
-- [ ] **[Notifications]**
+- [ ] Database
+- [ ] Notifications
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -250,14 +250,14 @@ I would like to thank code reviewers.
 
 > Add at least 2 questions new developers would ask when they decide to use your project.
 
-- **[How can i contribute to this project?]**
+- How can i contribute to this project?
 
-  - [Contact_me to this [email](bandonkeyea@gmail.com) and I add as collaborator]
-  - [Clone the repository and create a pul request with a well detailed feature intended to be added]
+  - Contact_me to this [email](bandonkeyea@gmail.com) and I add as collaborator
+  - Clone the repository and create a pul request with a well detailed feature intended to be added
 
-- **[Can I add external libraries?]**
+- Can I add external libraries?
 
-  - [Yes, but it must be license you own the right to or open source library]
+  - Yes, but it must be license you own the right to or open source library
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
