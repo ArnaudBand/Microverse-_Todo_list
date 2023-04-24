@@ -31,19 +31,19 @@ Live demo: [Todo_list](https://arnaudband.github.io/Microverse-_Todo_list/dist/)
 
 ### Setup
 
-Clone the GitHub Repository
-Install npm package manager
-npm install webpack-dev-server --save-dev
-npm run build
-npm start
+- Clone the GitHub Repository
+- Install npm package manager
+- npm install webpack-dev-server --save-dev
+- npm run build
+- npm start
 
 ## Authors
 
 👤 **Author1**
 
-- GitHub: [@githubhandle](https://github.com/B77748)
+- GitHub: [@githubhandle](https://github.com/ArnaudBand)
 - Twitter: [@twitterhandle](https://twitter.com/@ba104781)
-- LinkedIn: [LinkedIn](https://www.linkedin.com/in/arnaud-bandonkeye-893a2b228/)
+- LinkedIn: [LinkedIn](https://www.linkedin.com/in/ArnaudBandonkeye/)
 
 ## 🤝 Contributing
 
